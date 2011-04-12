@@ -3,9 +3,18 @@
     var defaultBindingAttributeName = "data-bind";
     ko.bindingHandlers = {};
 
+    function getJsonString(attributeText) {
+        var trimmed = ko.utils.stringTrim(attributeText);
+        if (trimmed.length >= 2 && trimmed.charAt(0) === '{' && trimmed.charAt(trimmed.length - 1) === '}') {
+            return trimmed.substring(1, trimmed.length - 1);
+        }
+        return attributeText;
+    }
+
     function parseBindingAttribute(attributeText, viewModel) {
         try {
-            var json = " { " + ko.jsonExpressionRewriting.insertPropertyAccessorsIntoJson(attributeText) + " } ";
+            var jsonString = getJsonString(attributeText),
+                json = " { " + ko.jsonExpressionRewriting.insertPropertyAccessorsIntoJson(jsonString) + " } ";
             return ko.utils.evalWithinScope(json, viewModel === null ? window : viewModel);
         } catch (ex) {
             throw new Error("Unable to parse binding attribute.\nMessage: " + ex + ";\nAttribute value: " + attributeText);

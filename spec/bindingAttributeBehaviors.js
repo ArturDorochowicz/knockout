@@ -64,7 +64,12 @@ describe('Binding attribute syntax', {
         testNode.innerHTML = "<div data-bind=' nonexistentHandler : \"Hello\" '></div>";
         ko.applyBindings(null, testNode); // No exception means success
     },
-
+    
+    'Should tolerate JSON string curly braces': function () {
+        testNode.innerHTML = "<div data-bind='{a : \"\"}'></div>";
+        ko.applyBindings(null, testNode); // No exception means success
+    },
+    
     'Should tolerate arbitrary literals as the values for a handler': function () {
         testNode.innerHTML = "<div data-bind='stringLiteral: \"hello\", numberLiteral: 123, boolLiteral: true, objectLiteral: {}, functionLiteral: function() { }'></div>";
         ko.applyBindings(null, testNode); // No exception means success
